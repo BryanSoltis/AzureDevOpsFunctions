@@ -1,4 +1,4 @@
-# AzureDevOpsFunctions
+# Azure DevOps Functions
 This repository contains functions for automating Azure DevOps processes.
 
 This repository is used in the following blog article. Full details on deploying this solution can be found in the article.
