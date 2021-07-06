@@ -47,7 +47,7 @@ To use this repository:
 
 8. In Azure DevOps, update a work item status.
 
-9. Confirm the service hook is called and the Azure Function is eectued to update the parent work item status.
+9. Confirm the service hook is called and the Azure Function is exectued to update the parent work item status.
 
 # Helpful Links
 
