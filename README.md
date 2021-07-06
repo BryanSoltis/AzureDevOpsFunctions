@@ -45,7 +45,7 @@ To use this repository:
 
 7. In Azure Key Vault, create a new secret for the DevOpsPAT value.
 
-8. In Azure DevOps, update a work tiem status.
+8. In Azure DevOps, update a work item status.
 
 9. Confirm the service hook is called and the Azure Function is eectued to update the parent work item status.
 
