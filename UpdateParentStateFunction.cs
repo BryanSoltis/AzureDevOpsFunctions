@@ -27,6 +27,8 @@ namespace AzureDevOpsFunctions
         {
             try
             {
+                log.LogInformation("UpdateParentStateFunction - STARTED");
+
                 var configurationBuilder = new ConfigurationBuilder()
                 .SetBasePath(context.FunctionAppDirectory)
                 .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
@@ -39,57 +41,61 @@ namespace AzureDevOpsFunctions
                 string updateState = configurationBuilder["DevOpsUpdateState"]; // Work item state to change parent item to  
                 string pat = configurationBuilder["DevOpsPAT"]; // DevOps Personal Access Token (from Azure Key Vault) 
 
-                log.LogInformation("PAT:" + pat);
+                // Create instance of VssConnection using Personal Access Token
+                string Url = string.Format(
+                    @"https://dev.azure.com/{0}",
+                    orgName);
 
-                // Get request body
-                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-                JObject data = (JObject)JsonConvert.DeserializeObject(requestBody);
-
-                // Check the child state
-                string currentState = data["resource"]["revision"]["fields"]["System.State"].ToString();
-
-                if (currentState != defaultState)
+                using (VssConnection connection = new VssConnection(new Uri(Url), new VssBasicCredential(string.Empty, pat)))
                 {
-                    // Get the parent id
-                    int parentId;
-                    // Check if there is a parent work item
-                    if (data["resource"]["revision"]["fields"]["System.Parent"] != null)
+
+                    // Get request body
+                    string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                    // log.LogInformation("Request body: " + requestBody);
+
+                    JObject data = (JObject)JsonConvert.DeserializeObject(requestBody);
+
+                    // Check the child state
+                    string currentState = data["resource"]["revision"]["fields"]["System.State"].ToString();
+
+                    if (currentState != defaultState)
                     {
-                        if (Int32.TryParse(data["resource"]["revision"]["fields"]["System.Parent"].ToString(), out parentId))
+                        // Get the parent id
+                        int parentId;
+                        // Check if there is a parent work item
+                        if (data["resource"]["revision"]["fields"]["System.Parent"] != null)
                         {
-                            string Url = string.Format(
-                                @"https://dev.azure.com/{0}",
-                                orgName);
-
-                            // Create instance of VssConnection using Personal Access Token
-                            VssConnection connection = new VssConnection(new Uri(Url), new VssBasicCredential(string.Empty, pat));
-
-                            // Get the parent work item
-                            WorkItemTrackingHttpClient workItemTrackingClient = connection.GetClient<WorkItemTrackingHttpClient>();
-
-                            string[] fieldNames = new string[] {
-                        "System.State",
-                        };
-
-                            WorkItem parentworkitem = workItemTrackingClient.GetWorkItemAsync(parentId, fieldNames).Result;
-
-                            // Check the parent state to make sure it needs to be modified
-                            if (parentworkitem.Fields["System.State"].ToString() != updateState)
+                            if (Int32.TryParse(data["resource"]["revision"]["fields"]["System.Parent"].ToString(), out parentId))
                             {
-                                // Update the parent to the default state
-                                JsonPatchDocument patchDocument = new JsonPatchDocument();
-                                patchDocument.Add(
-                                    new JsonPatchOperation()
-                                    {
-                                        Operation = Operation.Add,
-                                        Path = "/fields/System.State",
-                                        Value = updateState
-                                    }
-                                );
-                                WorkItem result = workItemTrackingClient.UpdateWorkItemAsync(patchDocument, parentId).Result;
+                                // Get the parent work item
+                                WorkItemTrackingHttpClient workItemTrackingClient = connection.GetClient<WorkItemTrackingHttpClient>();
+
+                                string[] fieldNames = new string[] {
+                                    "System.State"
+                                    };
+
+                                WorkItem parentworkitem = workItemTrackingClient.GetWorkItemAsync(parentId, fieldNames).Result;
+
+                                // Check the parent state to make sure it needs to be modified
+                                if (parentworkitem.Fields["System.State"].ToString() != updateState)
+                                {
+                                    // Update the parent to the default state
+                                    JsonPatchDocument patchDocument = new JsonPatchDocument();
+                                    patchDocument.Add(
+                                        new JsonPatchOperation()
+                                        {
+                                            Operation = Operation.Add,
+                                            Path = "/fields/System.State",
+                                            Value = updateState
+                                        }
+                                    );
+                                    WorkItem result = workItemTrackingClient.UpdateWorkItemAsync(patchDocument, parentId).Result;
+                                    log.LogInformation("Work item updated: " + parentworkitem.Id);
+                                }
                             }
                         }
                     }
+                    log.LogInformation("UpdateParentStateFunction - COMPLETED");
                 }
                 return new OkObjectResult("Success");
             }

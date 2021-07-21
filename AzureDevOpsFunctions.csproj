@@ -5,11 +5,12 @@
     <UserSecretsId>e9177fdc-ade4-46b1-a214-d5dda3c84aa3</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.15.0" />
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.12" />
+    <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.17.0" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.13" />
     <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="16.170.0" />
     <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="16.170.0" />
     <PackageReference Include="Microsoft.VisualStudio.Services.InteractiveClient" Version="16.170.0" />
+    <PackageReference Include="Moq" Version="4.16.1" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
