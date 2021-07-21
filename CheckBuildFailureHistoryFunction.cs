@@ -57,7 +57,7 @@ namespace AzureDevOpsFunctions
                         {
                             failureCount += 1;
                         }
-                        if (failureCount == Int32.Parse(configurationBuilder["RepeatedFailedBuildThreshold"]))
+                        if (failureCount == Int32.Parse(configurationBuilder["DevOpsRepeatedFailedBuildThreshold"]))
                         {
                             overThreshold = true;
                             break;

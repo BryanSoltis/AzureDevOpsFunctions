@@ -6,6 +6,7 @@
     "DevOpsOrgName": "[YOUR DEVOPS ORG NAME]",
     "DevOpsDefaultState": "[DEVOPS DEFAULT STATE - Example: New]",
     "DevOpsUpdateState": "[DEVOPS UPDATE STATE - Example: In Progress]",
-    "DevOpsPAT": "[YOUR DEVOPS PAT]"
+    "DevOpsPAT": "[YOUR DEVOPS PAT]",
+    "DevOpsRepeatedFailedBuildThreshold":  "3"
   }
 }
