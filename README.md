@@ -32,25 +32,23 @@ To use this repository:
 * **DevOpsPAT**: “[Your Azure Key Vault secret URL in the proper format. Example: @Microsoft.KeyVault(SecretUri=[Your Azure Key Vault Secrete URL)]”
 * **DevOpsRepeatedFailedBuildThreshold**: “[Number of times a build can fail before being flagged]”
 
-3. IN Azure Function App, add AppSettings for the above values (if running in Azure).
+3. Deploy the project to Azure Functions.
 
-4. Deploy the project to Azure Functions.
+4. Create the App Settings for the configuration values.
 
-5. Create the App Settings for the configuration values.
-
-6. In Azure DevOps, create a service hook.
+5. In Azure DevOps, create a service hook.
     a. Select "Web hooks" for the Service
     b. Select "Work item updated" for the Event
     c. Select "State" for the Field
     d. Enter the Azure Function URL for the Action
 
-7. In Azure DevOps, create new Personal Access Token (PAT).
+6. In Azure DevOps, create new Personal Access Token (PAT).
 
-8. In Azure Key Vault, create a new secret for the DevOpsPAT value.
+7. In Azure Key Vault, create a new secret for the DevOpsPAT value.
 
-9. In Azure DevOps, update a work item status.
+8. In Azure DevOps, update a work item status.
 
-10. Confirm the service hook is called and the Azure Function is exectued to update the parent work item status.
+9. Confirm the service hook is called and the Azure Function is exectued to update the parent work item status.
 
 # Helpful Links
 
