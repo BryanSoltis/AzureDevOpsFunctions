@@ -30,6 +30,7 @@ To use this repository:
 * **DevOpsDefaultState**: [Your Azure DevOps state for work items. Typically this value is ‘New’]
 * **DevOpsUpdateState**: “[Your Azure DevOps state for work items to be updated to. Typically this value is “In Progress”]
 * **DevOpsPAT**: “[Your Azure Key Vault secret URL in the proper format. Example: @Microsoft.KeyVault(SecretUri=[Your Azure Key Vault Secrete URL)]”
+* **DevOpsRepeatedFailedBuildThreshold**: “[Number of times a build can fail before being flagged]”
 
 3. Deploy the project to Azure Functions.
 
