@@ -65,7 +65,7 @@ namespace AzureDevOpsFunctions
                     }
                 }
                 
-                log.LogInformation("RepeatedFailedBuildFunction - COMPLETED");
+                log.LogInformation("CheckBuildFailureHistoryFunction - COMPLETED");
 
                 return new OkObjectResult(overThreshold);
             }
